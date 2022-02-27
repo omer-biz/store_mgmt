@@ -10,9 +10,9 @@ class CheckOutForm(forms.Form):
         super(CheckOutForm, self).clean()
 
         quantity = self.cleaned_data.get('quantity')
-        if quantity < 0:
+        if quantity <= 0:
             self._errors['quantity'] = self.error_class([
-                'Quantity can not be less than 0'
+                'Quantity can not be less than or equal to 0'
             ])
 
         return self.cleaned_data
@@ -25,9 +25,9 @@ class CheckInForm(forms.Form):
         super(CheckInForm, self).clean()
 
         quantity = self.cleaned_data.get('quantity')
-        if quantity < 0:
+        if quantity <= 0:
             self._errors['quantity'] = self.error_class([
-                'Quantity can not be less than 0'
+                'Quantity can not be less than or equal to 0'
             ])
 
         return self.cleaned_data
