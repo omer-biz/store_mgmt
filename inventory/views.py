@@ -1,8 +1,8 @@
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
-from inventory.forms import CheckInForm, CheckOutForm
+from inventory.forms import CheckInForm, CheckOutForm, OrderForm
 
-from inventory.models import InstoreItem, OnHandItem
+from inventory.models import InstoreItem, OnHandItem, OrderByEmployee
 
 def check_out(request, pk):
     selected_instore_item = InstoreItem.objects.get(pk=pk)
@@ -85,3 +85,20 @@ def check_in(request, pk):
             'quantity': returned_item.quantity,
         })
     return render(request, 'checkin.html', {'form': form, 'pk':pk})
+
+def order_item(request):
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            OrderByEmployee.objects.create(
+                name=form.cleaned_data['name'],
+                description=form.cleaned_data['description'],
+                ordered_by=form.cleaned_data['ordered_by'],
+            ).save()
+            return HttpResponseRedirect('/admin')
+
+    else:
+        form = OrderForm()
+
+    return render(request, 'orderitem.html', {'form': form})
+

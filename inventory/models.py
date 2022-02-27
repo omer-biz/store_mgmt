@@ -43,6 +43,17 @@ class IncomingItem(models.Model):
 class Employee(models.Model):
     name = models.CharField("Employee Name", max_length=255, blank=False)
     employee_id = models.CharField("Employee ID", max_length=100, blank=False)
+    secret_key = models.CharField("Secret Key", max_length=100, blank=False)
+
+    def __str__(self):
+        return self.name
+
+class OrderByEmployee(models.Model):
+    name = models.CharField("Order Name", max_length=100)
+    description = models.TextField("Description")
+    approved_by_store_mgmt = models.BooleanField("Approved by store manager", default=False)
+    approved_by_agency_dire = models.BooleanField("Approved by agency director", default=False)
+    ordered_by = models.ForeignKey(Employee, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
