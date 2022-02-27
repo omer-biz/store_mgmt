@@ -1,0 +1,12 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_modify %}
+
+{% block content %}
+<p class="alert">{{ message }}</p>
+
+<form method="POST" action"{% url 'check-in' pk %}">
+  {% csrf_token %}
+  {{ form }}
+  <input type="submit" value"Check In">
+</form>
+{% endblock %}
