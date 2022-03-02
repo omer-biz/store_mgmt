@@ -1,0 +1,39 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static admin_list %}
+
+
+{% block content %}
+<style>
+#custom_content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#content h1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#order-btn {
+  display: flex;
+  justify-content: right;
+  align-items: right;
+}
+
+.alert {
+  color: red;
+}
+</style>
+<div id="custom_content">
+
+
+    {% block content_main %}
+    {% endblock %}
+
+ <script>
+   document.getElementById("site-name").innerText = "{{ title }}"
+ </script>
+</div>
+{% endblock %}
+

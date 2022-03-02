@@ -1,31 +1,66 @@
-{% extends "admin/base_site.html" %}
-{% load i18n admin_urls static admin_list %}
+{% extends "base.html" %}
 
-
-{% block content %}
-<p class="alert">{{ message }}<p>
+{% block content_main %}
 
 <form id="changelist-form" method="POST" action="{% url 'order-item' %}">
   {% csrf_token %}
-  <label for="name"><b>Ordered Name:</b></label>
-  {{ form.name }}
-  <br>
-  <br>
 
-  <label for="description"><b>Description:</b></label>
-  {{ form.description }}
-  <br>
-  <br>
+  <table>
+    <tr>
+      <p class="alert">{{ form.errors.secret_key }}<p>
+      <p class="alert">{{ message }}<p>
+    </tr>
+    <tr>
+      <td>
+        <label for="name"><b>Ordered Name:</b></label>
+      </td>
 
-  <label for="ordered_by"><b>Ordered By:</b></label>
-  {{ form.ordered_by }}
-  <br>
-  <br>
+      <td>
+        {{ form.name }}
+      </td>
+    </tr>
 
-  <label for="secret_key"><b>Secret Key:</b></label>
-  {{ form.secret_key }}
-  <br>
-  <br>
-  <input type="submit" value="Order">
+    <tr>
+      <td>
+        <label for="description"><b>Description:</b></label>
+      </td>
+
+      <td>
+      {{ form.description }}
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <label for="ordered_by"><b>Ordered By:</b></label>
+      </td>
+
+      <td>
+      {{ form.ordered_by }}
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <label for="secret_key"><b>Secret Key:</b></label>
+      </td>
+
+      <td>
+        {{ form.secret_key }}
+      </td>
+    </tr>
+
+    <tr>
+      <td></td>
+      <td id="order-btn">
+        <input type="submit" value="Order">
+      </td>
+    </tr>
+
+  </table>
+
+
 </form>
+</fieldset>
 {% endblock %}
+

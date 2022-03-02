@@ -1,12 +1,35 @@
-{% extends "admin/base_site.html" %}
-{% load i18n admin_modify %}
+{% extends "base.html" %}
 
-{% block content %}
-<p class="alert">{{ message }}<p>
+{% block content_main %}
 
 <form method="POST" action="{% url 'check-out' pk %}">
   {% csrf_token %}
-  {{ form }}
-  <input type="submit" value="Check Out">
+
+  <table>
+    <tr>
+      <p class="alert">{{ message }}</p>
+      <p class="alert">{{ form.errors.quantity }}</p>
+    </tr>
+    <tr>
+      <td>
+        <label for="employee"><b>Employee</b></label>
+      </td>
+      <td>{{ form.employee }}</td>
+    </tr>
+    <tr>
+      <td>
+        <label for="employee"><b>Quantity</b></label>
+      </td>
+      <td>{{ form.quantity }}</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td id="order-btn">
+      <input type="submit" value="Check Out">
+      </td>
+    </tr>
+  </table>
+
+
 </form>
 {% endblock %}

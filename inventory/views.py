@@ -1,8 +1,11 @@
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
+from inventory import admin
 from inventory.forms import CheckInForm, CheckOutForm, OrderForm
 
 from inventory.models import InstoreItem, OnHandItem, OrderByEmployee
+
+title = admin.site_title
 
 def check_out(request, pk):
     selected_instore_item = InstoreItem.objects.get(pk=pk)
@@ -25,6 +28,7 @@ def check_out(request, pk):
                 name=selected_instore_item.name,
                 model=selected_instore_item.model,
                 serie=selected_instore_item.serie,
+                type=selected_instore_item.type,
                 quantity=form.cleaned_data['quantity'],
                 employee=form.cleaned_data['employee'],
             ).save()
@@ -41,7 +45,12 @@ def check_out(request, pk):
             "quantity": selected_instore_item.quantity,
         })
 
-    return render(request, 'checkout.html', {'form':form, 'pk': pk})
+    return render(request, 'checkout.html', {
+        'form':form, 
+        'pk': pk,
+        'title': title,
+
+    })
 
 def check_in(request, pk):
     returned_item = OnHandItem.objects.get(pk=pk)
@@ -49,10 +58,11 @@ def check_in(request, pk):
         form = CheckInForm(request.POST)
         if form.is_valid():
             if returned_item.quantity < form.cleaned_data['quantity']:
-                return render(request, 'checkout.html', {
-                    'form': form,
+                return render(request, 'checkin.html', {
+                    'form': CheckInForm(),
                     'pk': pk,
-                    'message': 'You are specifing more than there is in store'
+                    'message': 'You are specifing more than there is in hand',
+                    'title': title,
                 })
 
             ret_instore = InstoreItem.objects.filter(
@@ -66,6 +76,7 @@ def check_in(request, pk):
                     name=returned_item.name,
                     model=returned_item.model,
                     serie=returned_item.serie,
+                    type=selected_instore_item.type,
                     quantity=form.cleaned_data['quantity'],
                 ).save()
             else:
@@ -84,7 +95,10 @@ def check_in(request, pk):
         form = CheckInForm({
             'quantity': returned_item.quantity,
         })
-    return render(request, 'checkin.html', {'form': form, 'pk':pk})
+    return render(request, 'checkin.html', {
+        'form': form, 'pk':pk,
+        'title': title,
+    })
 
 def order_item(request):
     if request.method == 'POST':
@@ -95,10 +109,17 @@ def order_item(request):
                 description=form.cleaned_data['description'],
                 ordered_by=form.cleaned_data['ordered_by'],
             ).save()
-            return HttpResponseRedirect('/admin')
+            # return HttpResponseRedirect('/admin')
+            return render(request, 'orderitem.html', {
+                'form': OrderForm(),
+                'message': 'Request sent successfully 🟢',
+                'title': title,
+            })
 
     else:
         form = OrderForm()
 
-    return render(request, 'orderitem.html', {'form': form})
+    return render(request, 'orderitem.html', {'form': form, 'title': title})
 
+def home(request):
+    return HttpResponseRedirect('/order')

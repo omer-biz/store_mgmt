@@ -8,10 +8,10 @@ from .models import Employee, IncomingItem, InstoreItem, OnHandItem, OrderByEmpl
 class InstoreItemDefined(admin.ModelAdmin):
     search_fields = ("name", "model", "serie", )
     readonly_field = ("total_price", "name", "model", "serie", "quantity")
-    list_filter = ('name', 'model', 'serie')
+    list_filter = ('name', 'model', 'serie', 'type')
     list_display = (
         "name", "model", "serie",
-        "quantity", "check_out"
+        "quantity", "type", "check_out"
     )
 
     def check_out(self, obj):
@@ -33,10 +33,11 @@ class InstoreItemDefined(admin.ModelAdmin):
 
 @admin.register(IncomingItem)
 class IncomingItemDefined(admin.ModelAdmin):
-    search_fields = ("name", "model", "serie", )
+    search_fields = ("name", "model", "serie", "registered_date")
+    list_filter = ("name", "model", "registered_date",)
     list_display = (
         "name", "model", "serie",
-        "quantity", "unit_price",
+        "quantity", "unit_price", "type",
         "total_price", "registered_date"
     )
     exclude = (
@@ -51,11 +52,12 @@ class IncomingItemDefined(admin.ModelAdmin):
 
 @admin.register(OnHandItem)
 class OnHandItemDefined(admin.ModelAdmin):
-    search_fields = ("name", "model", "serie", "employee",)
-    list_filter = ('employee',)
+    search_fields = ("name", "model", "serie" )
+    list_filter = ('name', 'model', 'serie', 'type', 'employee')
     list_display = (
         "name", "model", "serie",
-        "quantity", 'employee',
+        "quantity", 'employee', "type",
+        "date",
         "check_in",
     )
 
@@ -84,21 +86,21 @@ class OrderByEmployeeDefined(admin.ModelAdmin):
     list_display = (
         'name', 'description', 
         'approved_by_store_mgmt',
-        'approved_by_agency_dire',
+        'ordered_by',
     )
     list_filter = (
         'name', 
+        'ordered_by',
         'approved_by_store_mgmt',
-        'approved_by_agency_dire',
     )
     search_fields = ('name', 'discription')
+    readonly_fields = ('name', 'description', 'ordered_by')
 
 
     def has_add_permission(self, request):
         return False
-    def has_change_permission(self, request, obj=None):
-        return False
     def has_delete_permission(self, request, obj=None):
         return False
 
-admin.site.site_header = "Hararii TVET Agency Inventory"
+site_title = "Hararii TVET Agency Inventory"
+admin.site.site_header = site_title

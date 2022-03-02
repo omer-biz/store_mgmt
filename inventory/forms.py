@@ -52,7 +52,7 @@ class OrderForm(forms.ModelForm):
 
         if employee.secret_key != secret_key:
             self._errors['secret_key'] = self.error_class([
-                f"Wrong secrect key for {employee}"
+                f"Wrong secrect key for {employee} 🔴"
             ])
 
         return self.cleaned_data

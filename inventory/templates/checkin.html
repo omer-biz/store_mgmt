@@ -1,12 +1,29 @@
-{% extends "admin/base_site.html" %}
-{% load i18n admin_modify %}
+{% extends "base.html" %}
 
-{% block content %}
-<p class="alert">{{ message }}</p>
+{% block content_main %}
 
 <form method="POST" action"{% url 'check-in' pk %}">
   {% csrf_token %}
-  {{ form }}
-  <input type="submit" value"Check In">
+  <table>
+    <tr>
+      <p class="alert">{{ message }}</p>
+      <p class="alert">{{ form.errors.quantity }}</p>
+    </tr>
+    <tr>
+      <td>
+        <label for="quantity">How Many</label>
+      </td>
+      <td>
+        {{ form.quantity }}
+      </td>
+    </tr>
+
+    <tr>
+      <td></td>
+      <td id="order-btn">
+        <input type="submit" value"Check In">
+      </td>
+    </tr>
+  </table>
 </form>
 {% endblock %}

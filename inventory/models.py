@@ -1,11 +1,17 @@
 from django.db import models
 from django.utils import timezone
 
+CHOICES = (
+    ("fungable", "Fungable"),
+    ("non-fungable", "Non-Fungable"),
+)
+
 class InstoreItem(models.Model):
     name = models.CharField("Product Name", max_length=255, blank=False)
     model = models.CharField("Model", max_length=255)
     serie = models.CharField("Serie", max_length=255)
     quantity = models.PositiveIntegerField("Quantity")
+    type = models.CharField("Type", max_length=255, choices=CHOICES)
 
     def __str__(self):
         return self.name
@@ -22,6 +28,7 @@ class IncomingItem(models.Model):
     unit_price = models.FloatField("Unit Price")
     total_price = models.FloatField("Total Price", blank=True, null=True)
     registered_date = models.DateField("Registered Date", default=timezone.now)
+    type = models.CharField("Type", max_length=255, choices=CHOICES)
 
     def save(self, *args, **kwargs):
         self.total_price = self.unit_price * self.quantity
@@ -30,6 +37,7 @@ class IncomingItem(models.Model):
             model=self.model,
             serie=self.serie,
             quantity=self.quantity,
+            type=self.type,
         ).save()
         super(IncomingItem, self).save(*args, **kwargs)
 
@@ -52,7 +60,6 @@ class OrderByEmployee(models.Model):
     name = models.CharField("Order Name", max_length=100)
     description = models.TextField("Description")
     approved_by_store_mgmt = models.BooleanField("Approved by store manager", default=False)
-    approved_by_agency_dire = models.BooleanField("Approved by agency director", default=False)
     ordered_by = models.ForeignKey(Employee, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -64,6 +71,8 @@ class OnHandItem(models.Model):
     serie = models.CharField("Serie", max_length=255)
     quantity = models.PositiveIntegerField("Quantity")
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True, null=True)
+    type = models.CharField("Type", max_length=255, choices=CHOICES)
+    date = models.DateField("Date", default=timezone.now)
 
     def __str__(self):
         return self.name
