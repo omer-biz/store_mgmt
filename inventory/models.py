@@ -60,6 +60,7 @@ class OrderByEmployee(models.Model):
     name = models.CharField("Order Name", max_length=100)
     description = models.TextField("Description")
     approved_by_store_mgmt = models.BooleanField("Approved by store manager", default=False)
+    approved_by_age_dir = models.BooleanField("Approved by Agency Director", default=False)
     ordered_by = models.ForeignKey(Employee, on_delete=models.CASCADE)
 
     def __str__(self):

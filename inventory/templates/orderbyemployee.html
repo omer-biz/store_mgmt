@@ -1,0 +1,25 @@
+{% extends 'admin/change_list.html' %}
+
+{% block object-tools %}
+    <script>
+      function printList() {
+        document.getElementsByTagName('h1')[0].remove()
+        document.getElementById('toolbar').remove()
+        document.getElementById('nav-filter').remove()
+        document.getElementById('toggle-nav-sidebar').remove()
+        document.getElementsByClassName('breadcrumbs')[0].remove()
+        document.getElementById('changelist-filter').remove()
+        document.getElementById('nav-sidebar').remove()
+        document.getElementById('header').remove()
+        document.getElementsByTagName('h1')[0].remove()
+        document.getElementById('print-btn').remove()
+
+        window.print()
+
+        document.location.reload()
+      }
+    </script>
+  <div>
+    <button id="print-btn" onclick="printList()" class="btn">PRINT</button>
+  </div>
+{% endblock %}
